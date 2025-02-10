@@ -1,12 +1,12 @@
-## LeetCode Solutions
+# Algorithms & Data Structures
+
+Welcome to my study notes & practice area!
 
 <details>
   <summary>This repo is more of a scratchpad and less of a showcase.</summary>
 Sometimes it's nice to work with the code in a more familiar environment.
 
 Not all of my solutions will be in here and not all of my solutions here will be submitted on LeetCode.
-
-
 </details>
 
 ### If you're from CP&I seeing this:
