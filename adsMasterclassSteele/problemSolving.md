@@ -40,8 +40,8 @@
 - Frequency Counter
     - Usually uses objects or sets to collect values or how often a value may appear in an input.
     - Practice: Valid Anagram
-        - [GH](https://github.com/hnsvill/algorithmsDataStructures/blob/main/leetcode/validAnagram.js)
-        - [LeetCode Submission](https://leetcode.com/problems/valid-anagram/submissions/1537689504/?envType=study-plan-v2&envId=top-interview-150)
+        - [GH](https://github.com/hannahscovill/algorithmsDataStructures/blob/main/leetcode/validAnagram.js)
+        - [LeetCode Problem](https://leetcode.com/problems/valid-anagram/)
 - Multiple Pointers
 - Sliding Window
 - Divide and conquer
@@ -53,3 +53,6 @@
 
 #### Supplemental Reading
 - How to Solve It; George Pólya
+
+I saw this in an informational video when Googling HireVue so I'm gonna put this here - 
+[Palindromic Substrings](http://leetcode.com/problems/palindromic-substrings/description/)
