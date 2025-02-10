@@ -32,3 +32,24 @@
 5. Can you improve the performance of your solution?
 6. Can you think of other ways to refactor?
 7. How did other people solve this problem?
+
+
+---
+
+### Pattern Examples to Get Familiar With
+- Frequency Counter
+    - Usually uses objects or sets to collect values or how often a value may appear in an input.
+    - Practice: Valid Anagram
+        - [GH](https://github.com/hnsvill/algorithmsDataStructures/blob/main/leetcode/validAnagram.js)
+        - [LeetCode Submission](https://leetcode.com/problems/valid-anagram/submissions/1537689504/?envType=study-plan-v2&envId=top-interview-150)
+- Multiple Pointers
+- Sliding Window
+- Divide and conquer
+- Dynamic Programming
+- Greedy Algorithms
+- Backtracking
+- ...
+
+
+#### Supplemental Reading
+- How to Solve It; George Pólya
