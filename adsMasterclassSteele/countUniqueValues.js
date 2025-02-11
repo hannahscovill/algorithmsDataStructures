@@ -15,11 +15,6 @@
  * @returns {Number} The quantity of unique values
  */
 const countUniqueValues = (sortedArray) => {
-    // Sending this to a set and getting the length is
-    // not what we're trying to practice but is so easyyyy
-    // const s = new Set(sortedArray)
-    // return Array.from(s).length
-
     // Set up two pointers for index access to sortedArray
     // Step from each side one at a time. Left gets a turn, then right.
     // This will give us a nice, early return on all those 1's in the 
@@ -73,6 +68,23 @@ const countUniqueValuesScout = (sortedArray) => {
     // Stepping through the expected behavior was helpful
 }
 
+/**
+ * Counts the unique values in a given array - the exercise called for trying to find an 0(1).
+ * I'm not convinced this is O(1)
+ * @param {Array[Number]} sortedArray - Sorted array of numbers that
+ *   may contain negative numbers
+ * @returns {Number} The quantity of unique values
+ */
+const countUniqueValuesBonus = (sortedArray) => {
+    // Sending this to a set and getting the length is
+    // not what we're trying to practice but is so easyyyy
+
+    // This could be O(1) if the C/C++ implementation somehow was.
+    // I'm not sure how you can process a whole array in O(1) time.
+    const s = new Set(sortedArray)
+    return Array.from(s).length
+}
+
 const inputs = [
     [1, 1, 1, 1, 1, 2], // 2
     [1, 2, 3, 4, 4, 4, 7, 7, 12, 12, 13], // 7
@@ -81,6 +93,6 @@ const inputs = [
 ]
 
 inputs.forEach(input => {
-    console.log(countUniqueValuesScout(input))
+    console.log(countUniqueValuesBonus(input))
 })
 
