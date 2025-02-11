@@ -54,8 +54,23 @@ const countUniqueValuesScout = (sortedArray) => {
     // the value if different from the value i is at.
     // If j finds a new value, i replaces the value where it's at <- starting will be tricky
     // when j+1 > sortedArray.length-1, return i's value (the index, not the array value at the index)
-
-
+    if (sortedArray.length == 0) return 0
+    var i = 0;
+    var j = 1;
+    while (j < sortedArray.length) {
+        var iAndJValuesAreTheSame = sortedArray[i] == sortedArray[j]
+        if (!iAndJValuesAreTheSame) {
+            ++i
+            sortedArray[i] = sortedArray[j]
+            ++j
+        }
+        if (sortedArray[i] == sortedArray[j]) {
+            ++j
+        }
+        halp++
+    }
+    return i + 1
+    // Stepping through the expected behavior was helpful
 }
 
 const inputs = [
@@ -66,6 +81,6 @@ const inputs = [
 ]
 
 inputs.forEach(input => {
-    console.log(countUniqueValues(input))
+    console.log(countUniqueValuesScout(input))
 })
 
