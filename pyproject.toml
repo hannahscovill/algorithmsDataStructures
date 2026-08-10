@@ -1,0 +1,11 @@
+# Exists only so `uv run tools/fetch_problem.py` has markdownify available.
+# The name/version fields are required by the packaging standard but unused —
+# there is no [build-system], so uv treats this as a virtual project and never
+# builds or installs it.
+[project]
+name = "leetcode-tooling"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = [
+    "markdownify>=1.2.3",
+]

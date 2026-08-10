@@ -1,3 +1,7 @@
-*localDev/
+*zzLocalDev/
 Exercism/
 .DS_Store
+
+# uv creates this for tools/fetch_problem.py; uv.lock is committed instead
+.venv/
+__pycache__/
