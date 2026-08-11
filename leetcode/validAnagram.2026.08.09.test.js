@@ -20,5 +20,6 @@ runCases({
     cases: [
         { args: ["anagram", "nagaram"], expected: true },
         { args: ["rat", "car"], expected: false },
+        { args: ["a", "ab"], expected: false },
     ],
 });
