@@ -10,7 +10,25 @@ const { test } = require('node:test');
 const assert = require('node:assert');
 
 function loadSolution(file, fnName) {
-    const src = fs.readFileSync(path.join(__dirname, file), 'utf8');
+    const full = path.join(__dirname, file);
+
+    // Register the solution in Node's module graph so `node --test --watch`
+    // reruns when it changes. Reading it with fs alone leaves the watcher
+    // blind to it: editing a solution would restart the runner and then run
+    // zero tests ("Restarted at ..." and nothing else). Top-level output is
+    // muted during this pass so side effects can't print twice.
+    const realLog = console.log;
+    console.log = () => {};
+    try {
+        require(full);
+    } catch {
+        // Solutions don't have to be requireable; the fs read below is the
+        // one that actually matters.
+    } finally {
+        console.log = realLog;
+    }
+
+    const src = fs.readFileSync(full, 'utf8');
     // Function bodies run in sloppy mode, which tolerates the implicit
     // globals LeetCode-style solutions sometimes leave lying around.
     const fn = new Function(
