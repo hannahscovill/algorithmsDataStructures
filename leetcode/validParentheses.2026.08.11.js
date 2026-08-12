@@ -2,6 +2,8 @@
 // 20. Valid Parentheses — Easy
 // Topics: String, Stack, Bracket Sequences
 
+"use strict";
+
 /*
 Given a string `s` containing just the characters `'('`, `')'`, `'{'`, `'}'`, `'['` and `']'`, determine if the input string is valid.
 
@@ -56,40 +58,47 @@ An input string is valid if:
 var isValid = function (s) {
   // edge case, odd will always be false
   if (s.length % 2 !== 0) return false;
-  // util for is this an open or close?
-  const isOpen = (char) => char === "[" || char === "(" || char === "{";
-  const isClosed = (char) => !isOpen(char);
-  // util for if they match
-  const matches = (open, close) => {
+  // utils for isOpen, isClosed, matches
+  const open = "[{(";
+  const closed = "]})";
+  const isOpen = (paren) => open.includes(paren);
+  const isClosed = (paren) => closed.includes(paren);
+  const matches = (first, second) => {
+    const curly = "{}";
+    const round = "()";
+    const square = "[]";
     switch (true) {
-      case open === "[" && close === "]":
-        return true;
-      case open === "(" && close === ")":
-        return true;
-      case open === "{" && close === "}":
-        return true;
+      case curly.includes(first):
+        return curly.includes(second);
+      case round.includes(first):
+        return round.includes(second);
+      case square.includes(first):
+        return square.includes(second);
       default:
         return false;
     }
   };
+  const stack = [];
+  for (var i = 0; i < s.length; i++) {
+    // check if a paren is open. If it is, add it to the stack
+    // if the paren is closed, see if we can remove one from the stack (must match)
 
-  // check if i and i+1 are a pair, if not, check if i or -i are a pair
-  // i, j, k - probably just i/i+1, j
-  // move while j > i
-  var i = 0;
-  var j = s.length - 1;
-  while (i < j) {
-    const first = s[i];
-    const second = s[i + 1];
-    const last = s[j];
-    if (isOpen(first) && isClosed(second) && matches(first, second)) {
-      i = i + 2;
-    } else if (isOpen(first) && isClosed(last) && matches(first, last)) {
-      i++;
-      j--;
-    } else {
-      return false;
+    // stack.length > 0 && s.length > 0
+    const current = s[i];
+    switch (true) {
+      case isOpen(current):
+        // add to the stack
+        stack.push(current);
+        break;
+      // if it's closed
+      case isClosed(current) && matches(stack[stack.length - 1], current):
+        stack.pop();
+        break;
+      default:
+        return false;
     }
   }
-  return true;
+  // because s.length is always at least 1 we can do this
+  return stack.length === 0;
 };
+module.exports = { isValid };
