@@ -2,6 +2,36 @@
 
 Welcome to my study notes & practice area
 
+## Solutions completed
+
+| Problem | Difficulty | Completed | Solution | Notes |
+|---|---|---|---|---|
+| [Valid Anagram](https://leetcode.com/problems/valid-anagram/) | Easy | 2026.08.12 15:40 | [validAnagram.2026.08.09.js](leetcode/validAnagram.2026.08.09.js) | |
+| [Plus One](https://leetcode.com/problems/plus-one/) | Easy | 2026.08.12 14:46 | [plusOne.2026.08.12.js](leetcode/plusOne.2026.08.12.js) | |
+| [Spiral Matrix](https://leetcode.com/problems/spiral-matrix/) | Medium | 2026.08.12 10:42 | [spiralMatrix.2026.08.12.js](leetcode/spiralMatrix.2026.08.12.js) | |
+| [Can I Win](https://leetcode.com/problems/can-i-win/) | Medium | 2026.08.12 09:26 | [canIWin.2026.08.11.js](leetcode/canIWin.2026.08.11.js) | INCOMPLETE |
+| [Valid Parentheses](https://leetcode.com/problems/valid-parentheses/) | Easy | 2026.08.12 09:25 | [validParentheses.2026.08.11.js](leetcode/validParentheses.2026.08.11.js) | |
+| [Spiral Matrix](https://leetcode.com/problems/spiral-matrix/) | Medium | 2026.08.11 18:17 | [spiralMatrix.2026.08.11.js](leetcode/spiralMatrix.2026.08.11.js) | |
+| [Search Insert Position](https://leetcode.com/problems/search-insert-position/) | Easy | 2026.07.28 08:34 | [searchInsertPosition.2026.07.28.js](leetcode/searchInsertPosition.2026.07.28.js) | INCOMPLETE |
+| [Ransom Note](https://leetcode.com/problems/ransom-note/) | Easy | 2025.02.15 11:00 | [ransomNote.2025.02.15.js](leetcode/ransomNote.2025.02.15.js) | |
+| [Valid Palindrome](https://leetcode.com/problems/valid-palindrome/) | Easy | 2025.02.14 22:54 | [validPalindrome.2025.02.14.js](leetcode/validPalindrome.2025.02.14.js) | |
+| [Jump Game](https://leetcode.com/problems/jump-game/) | Medium | 2025.02.11 22:44 | [jumpGame.js](leetcode/jumpGame.js) | INCOMPLETE |
+| [Find Peak Element](https://leetcode.com/problems/find-peak-element/) | Medium | 2025.02.11 20:08 | [findPeakElement.2025.02.11.js](leetcode/findPeakElement.2025.02.11.js) | INCOMPLETE |
+| [Valid Anagram](https://leetcode.com/problems/valid-anagram/) | Easy | 2025.02.09 21:07 | [validAnagram.2025.02.09.js](leetcode/validAnagram.2025.02.09.js) | |
+| [Memoize](https://leetcode.com/problems/memoize/) | Medium | 2025.02.09 19:54 | [memoize.2025.02.09.js](leetcode/memoize.2025.02.09.js) | INCOMPLETE |
+| [Binary Tree Paths](https://leetcode.com/problems/binary-tree-paths/) | Easy | 2025.02.09 19:54 | [binaryTreePaths.2025.02.09.js](leetcode/binaryTreePaths.2025.02.09.js) | |
+| [Longest Common Prefix](https://leetcode.com/problems/longest-common-prefix/) | Easy | 2025.02.09 19:54 | [longestCommonPrefix.2025.02.09.js](leetcode/longestCommonPrefix.2025.02.09.js) | |
+| [Majority Element](https://leetcode.com/problems/majority-element/) | Easy | 2025.02.09 19:54 | [majorityElement.2025.02.09.js](leetcode/majorityElement.2025.02.09.js) | |
+| [Rotate Array](https://leetcode.com/problems/rotate-array/) | Medium | 2025.02.09 19:54 | [rotateArray.2025.02.09.js](leetcode/rotateArray.2025.02.09.js) | |
+
+### Totals by month
+
+| Month | Solved | Easy | Medium | Hard |
+|---|---|---|---|---|
+| 2026.08 | 6 | 3 | 3 | 0 |
+| 2026.07 | 1 | 1 | 0 | 0 |
+| 2025.02 | 10 | 6 | 4 | 0 |
+
 ## Setup
 
 Two toolchains, both lockfile-pinned:

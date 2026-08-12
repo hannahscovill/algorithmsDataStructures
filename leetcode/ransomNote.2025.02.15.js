@@ -1,5 +1,46 @@
-// https://leetcode.com/problems/ransom-note/?envType=study-plan-v2&envId=top-interview-150
+// https://leetcode.com/problems/ransom-note/
+// 383. Ransom Note — Easy
+// Topics: Hash Table, String, Counting
 
+'use strict';
+
+/*
+Given two strings `ransomNote` and `magazine`, return `true` *if* `ransomNote` *can be constructed by using the letters from* `magazine` *and* `false` *otherwise*.
+
+Each letter in `magazine` can only be used once in `ransomNote`.
+
+**Example 1:**
+
+```
+Input: ransomNote = "a", magazine = "b"
+Output: false
+```
+
+**Example 2:**
+
+```
+Input: ransomNote = "aa", magazine = "ab"
+Output: false
+```
+
+**Example 3:**
+
+```
+Input: ransomNote = "aa", magazine = "aab"
+Output: true
+```
+
+**Constraints:**
+
+* `1 <= ransomNote.length, magazine.length <= 10^5`
+* `ransomNote` and `magazine` consist of lowercase English letters.
+*/
+
+/**
+ * @param {string} ransomNote
+ * @param {string} magazine
+ * @return {boolean}
+ */
 /**
  * @param {string} ransomNote
  * @param {string} magazine
@@ -32,6 +73,7 @@ const duplicatesFromFrontRemoved = (s, getRidOfThis = false) => {
     }
     return s
 }
+
 
 /**
  * @param {string} ransomNote
@@ -72,3 +114,5 @@ const cantConstruct = function (ransomNote, magazine) {
     //
     // if note[first] != magazine[first] : call with all of note and omit that char from magazine
 };
+
+module.exports = { canConstruct };

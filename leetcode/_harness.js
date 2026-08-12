@@ -138,7 +138,20 @@ export function runCases(spec) {
         compare = 'exact',
         paramTypes = [],
         output = null,
+        // Opt-in, per test file. A file that registers no tests is an error in
+        // Vitest ("No test suite found"), which is the right default — an empty
+        // test file is usually a mistake. Set this on a scaffold whose cases
+        // you've commented out on purpose and the file reports as skipped
+        // instead of failing. Off unless asked for.
+        passWithNoTests = false,
     } = spec;
+
+    if (passWithNoTests && (cases?.length ?? 0) === 0) {
+        // Registering something is what keeps Vitest from erroring; skip marks
+        // it as deliberately unfinished rather than quietly passing.
+        test.skip(`${fnName}: no cases yet`, () => {});
+        return;
+    }
 
     if (typeof fn !== 'function') {
         throw new Error(

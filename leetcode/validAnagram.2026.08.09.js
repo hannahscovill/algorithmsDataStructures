@@ -35,11 +35,11 @@ Given two strings `s` and `t`, return `true` if `t` is an anagram of `s`, and `f
 var isAnagram = function (s, t) {
   // are strings equal length
   if (s.length !== t.length) return false;
-  console.log('are they uneven?')
-  console.log(s.length !== t.length)
+  // console.log('are they uneven?')
+  // console.log(s.length !== t.length)
 
   const frequencyFromString = (ogStr) => {
-    seen = new Map();
+    var seen = new Map();
     const chars = ogStr.split("");
     chars.forEach((x) => {
       seen.has(x) ? seen.set(x, seen.get(x) + 1) : seen.set(x, 1);
@@ -52,7 +52,7 @@ var isAnagram = function (s, t) {
   console.log(freqS)
   // then map 2
   const freqT = frequencyFromString(t);
-  console.log(freqT)
+  // console.log(freqT)
   // loop over map? to check values match in other map
   const hasSameValueAsFreqT = ([k, v]) => freqT.get(k) == v
   console.log([...freqS].every(hasSameValueAsFreqT))
