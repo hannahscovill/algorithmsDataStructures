@@ -2,6 +2,8 @@
 // 54. Spiral Matrix — Medium
 // Topics: Array, Matrix, Simulation
 
+'use strict';
+
 /*
 Given an `m x n` `matrix`, return *all elements of the* `matrix` *in spiral order*.
 
@@ -84,3 +86,5 @@ var spiralOrder = function (matrix) {
   }
   return spiral;
 };
+
+module.exports = { spiralOrder };

@@ -2,6 +2,8 @@
 // 242. Valid Anagram — Easy
 // Topics: Hash Table, String, Sorting
 
+'use strict';
+
 /*
 Given two strings `s` and `t`, return `true` if `t` is an anagram of `s`, and `false` otherwise.
 
@@ -56,3 +58,5 @@ var isAnagram = function (s, t) {
   console.log([...freqS].every(hasSameValueAsFreqT))
   return [...freqS].every(hasSameValueAsFreqT);
 };
+
+module.exports = { isAnagram };

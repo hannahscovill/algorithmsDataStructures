@@ -1,47 +1,14 @@
-// Shared test harness for LeetCode solutions. Not a test file itself —
-// `node --test` only picks up *.test.js, so this is ignored by the runner.
+// Shared test harness for LeetCode solutions.
 //
-// Solution files deliberately have no module.exports, so they stay pasteable
-// into LeetCode verbatim. We read the source and evaluate it instead.
+// Test files import their solution directly and hand the function to
+// runCases, so Vitest sees the real module: watch mode reruns on solution
+// edits, and failures point at the solution's own line.
+//
+// Everything here is LeetCode-specific behaviour that no test runner
+// provides — argument coercion, in-place problems, and result ordering.
 
-const fs = require('node:fs');
-const path = require('node:path');
-const { test } = require('node:test');
-const assert = require('node:assert');
-
-function loadSolution(file, fnName) {
-    const full = path.join(__dirname, file);
-
-    // Register the solution in Node's module graph so `node --test --watch`
-    // reruns when it changes. Reading it with fs alone leaves the watcher
-    // blind to it: editing a solution would restart the runner and then run
-    // zero tests ("Restarted at ..." and nothing else). Top-level output is
-    // muted during this pass so side effects can't print twice.
-    const realLog = console.log;
-    console.log = () => {};
-    try {
-        require(full);
-    } catch {
-        // Solutions don't have to be requireable; the fs read below is the
-        // one that actually matters.
-    } finally {
-        console.log = realLog;
-    }
-
-    const src = fs.readFileSync(full, 'utf8');
-    // Function bodies run in sloppy mode, which tolerates the implicit
-    // globals LeetCode-style solutions sometimes leave lying around.
-    const fn = new Function(
-        `${src}\n;return typeof ${fnName} === "function" ? ${fnName} : undefined;`
-    )();
-    if (!fn) {
-        throw new Error(
-            `${file} defines no function named "${fnName}". ` +
-            `Rename it, or update fnName in the test file.`
-        );
-    }
-    return fn;
-}
+import { test, expect } from 'vitest';
+import assert from 'node:assert';
 
 // --- input coercion ------------------------------------------------------
 // LeetCode serializes trees and linked lists as flat arrays. Solutions expect
@@ -85,65 +52,63 @@ function coerce(value, type) {
     return value;
 }
 
-// --- comparators ---------------------------------------------------------
-// Sorting by JSON is lexicographic, not numeric — fine here, because both
-// sides get the same treatment and we only ever check equality.
+// --- comparison ----------------------------------------------------------
+// Sorting by JSON is lexicographic rather than numeric — fine here, since
+// both sides get the same treatment and we only ever check equality.
 
 const key = (v) => JSON.stringify(v);
-const cmp = (a, b) => (key(a) < key(b) ? -1 : key(a) > key(b) ? 1 : 0);
+const order = (a, b) => (key(a) < key(b) ? -1 : key(a) > key(b) ? 1 : 0);
 
-const sortShallow = (v) => (Array.isArray(v) ? [...v].sort(cmp) : v);
+const sortShallow = (v) => (Array.isArray(v) ? [...v].sort(order) : v);
 const sortDeep = (v) => (Array.isArray(v) ? sortShallow(v.map(sortDeep)) : v);
 
-const COMPARATORS = {
-    exact: (actual, expected) => assert.deepStrictEqual(actual, expected),
-    unordered: (actual, expected) =>
-        assert.deepStrictEqual(sortShallow(actual), sortShallow(expected)),
-    unorderedDeep: (actual, expected) =>
-        assert.deepStrictEqual(sortDeep(actual), sortDeep(expected)),
+const SHAPES = {
+    exact: (v) => v,
+    unordered: sortShallow,
+    unorderedDeep: sortDeep,
 };
 
-// When an exact comparison fails, check whether a looser one would have
-// passed and say so — that turns a confusing diff into a one-word fix.
-function check(actual, expected, compare) {
-    const comparator = COMPARATORS[compare];
-    if (!comparator) {
-        throw new Error(
-            `Unknown compare mode "${compare}". ` +
-            `Use one of: ${Object.keys(COMPARATORS).join(', ')}`
-        );
-    }
+function matches(actual, expected, mode) {
     try {
-        comparator(actual, expected);
-    } catch (err) {
-        const alt = compare === 'exact' ? looserMatch(actual, expected) : null;
-        if (!alt) throw err;
-
-        // Build a new error rather than appending to err.message: the reporter
-        // prints err.stack, which captured the message at throw time, so a
-        // later edit to .message would never be shown.
-        throw new assert.AssertionError({
-            message:
-                `${err.message}\n\n  hint: same elements, different order — ` +
-                `this passes with compare: '${alt}'`,
-            actual,
-            expected,
-            operator: 'deepStrictEqual',
-        });
+        assert.deepStrictEqual(SHAPES[mode](actual), SHAPES[mode](expected));
+        return true;
+    } catch {
+        return false;
     }
 }
 
 // Which looser comparator, if any, would have accepted this result?
 function looserMatch(actual, expected) {
     for (const alt of ['unordered', 'unorderedDeep']) {
-        try {
-            COMPARATORS[alt](actual, expected);
-            return alt;
-        } catch {
-            // this mode doesn't help either
-        }
+        if (matches(actual, expected, alt)) return alt;
     }
     return null;
+}
+
+function check(actual, expected, compare) {
+    const shape = SHAPES[compare];
+    if (!shape) {
+        throw new Error(
+            `Unknown compare mode "${compare}". ` +
+            `Use one of: ${Object.keys(SHAPES).join(', ')}`
+        );
+    }
+
+    // LeetCode exposes no ordering flag, so the generator has to guess. When
+    // the guess is wrong, say so in the failure instead of leaving a diff
+    // that looks baffling.
+    if (compare === 'exact' && !matches(actual, expected, 'exact')) {
+        const alt = looserMatch(actual, expected);
+        if (alt) {
+            expect(
+                actual,
+                `same elements, different order — this passes with compare: '${alt}'`
+            ).toStrictEqual(expected);
+            return;
+        }
+    }
+
+    expect(shape(actual)).toStrictEqual(shape(expected));
 }
 
 // --- running -------------------------------------------------------------
@@ -165,9 +130,9 @@ function label(fnName, args, index) {
     return `example ${index + 1}: ${fnName}(${rendered})`;
 }
 
-function runCases(spec) {
+export function runCases(spec) {
     const {
-        file,
+        fn,
         fnName,
         cases,
         compare = 'exact',
@@ -175,7 +140,14 @@ function runCases(spec) {
         output = null,
     } = spec;
 
-    const fn = loadSolution(file, fnName);
+    if (typeof fn !== 'function') {
+        throw new Error(
+            `runCases was given ${typeof fn} instead of a function. ` +
+            `Check the import at the top of this test file — the solution ` +
+            `must export ${fnName}.`
+        );
+    }
+
     cases.forEach((c, i) => {
         test(label(fnName, c.args, i), () => {
             check(invoke(fn, c.args, paramTypes, output), c.expected, compare);
@@ -183,4 +155,4 @@ function runCases(spec) {
     });
 }
 
-module.exports = { runCases, loadSolution, COMPARATORS, buildTree, buildList };
+export { buildTree, buildList };

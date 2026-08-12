@@ -1,0 +1,11 @@
+{
+  "name": "algorithms-data-structures",
+  "private": true,
+  "scripts": {
+    "test": "vitest",
+    "test:run": "vitest run"
+  },
+  "devDependencies": {
+    "vitest": "^4.1.10"
+  }
+}

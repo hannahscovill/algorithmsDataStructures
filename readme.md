@@ -2,6 +2,18 @@
 
 Welcome to my study notes & practice area
 
+## Setup
+
+Two toolchains, both lockfile-pinned:
+
+```bash
+npm install
+```
+
+That's it for running tests. The problem fetcher needs nothing installed —
+[uv](https://docs.astral.sh/uv/) reads `pyproject.toml` and `uv.lock`, builds
+`.venv/` on first run, and fetches Python if it's missing.
+
 ## Downloading a problem
 
 Fetches a problem from LeetCode and writes a JavaScript stub plus a test file:
@@ -10,15 +22,11 @@ Fetches a problem from LeetCode and writes a JavaScript stub plus a test file:
 uv run tools/fetch_problem.py two-sum
 ```
 
-A full URL works too, which is handy since it's what you copy from the browser:
+A full URL works too, which is what you copy from the browser:
 
 ```bash
 uv run tools/fetch_problem.py https://leetcode.com/problems/two-sum/
 ```
-
-Nothing to install first. [uv](https://docs.astral.sh/uv/) reads `pyproject.toml`
-and `uv.lock`, builds `.venv/` on the first run, and fetches Python if it's
-missing. `uv.lock` pins exact versions, so a fresh clone gets the same setup.
 
 Useful flags:
 
@@ -33,54 +41,66 @@ Useful flags:
 Generated files carry the date they were downloaded:
 
 ```
-leetcode/twoSum.2026.08.09.js
-leetcode/twoSum.2026.08.09.test.js
+leetcode/twoSum.2026.08.11.js
+leetcode/twoSum.2026.08.11.test.js
 ```
 
-Re-solving a problem later gets its own dated pair, so earlier attempts are
-never overwritten. Twice in one day appends the time —
-`twoSum.2026.08.09.1425.js`.
+Re-solving later gets its own dated pair, so earlier attempts are never
+overwritten. Twice in one day appends the time — `twoSum.2026.08.11.1425.js`.
 
 ## Running tests
 
-Node's built-in test runner, so there's no `package.json` and nothing to install.
-
-Tests only exist for problems you've downloaded. `fetch_problem.py` prints the
-exact command for the files it just wrote — copy that line:
-
-```
-242. Valid Anagram (Easy) -> validAnagram.2026.08.09.js
-  wrote   leetcode/validAnagram.2026.08.09.js
-  wrote   leetcode/validAnagram.2026.08.09.test.js
-
-Run:  node --test --watch leetcode/validAnagram.2026.08.09.test.js
-```
-
-Watch mode is the one to live in while solving — it reruns on every save. To
-find the test file for something you downloaded earlier:
+Watch mode — the one to live in while solving:
 
 ```bash
-ls leetcode/*.test.js
+npm test
 ```
 
-Everything at once:
+Narrow it to the problem you're working on:
 
 ```bash
-node --test
+npx vitest twoSum
 ```
 
-Note that `node --test leetcode/` does **not** work — a bare directory is read as
-a module path. Use a quoted glob instead:
+One run, no watch:
 
 ```bash
-node --test 'leetcode/*.test.js'
+npm run test:run
 ```
+
+### Reading the output
+
+Vitest labels `console.log` output with the test case it came from, so debug
+prints stay next to the failure they belong to:
+
+```
+stdout | canIWin.2026.08.11.test.js > example 1: canIWin(10, 11)
+11 10
+
+ FAIL  canIWin.2026.08.11.test.js > example 1: canIWin(10, 11)
+AssertionError: expected undefined to strictly equal false
+- Expected: false
++ Received: undefined
+```
+
+By default only the **failing** test's logs are shown. Use `--reporter=verbose`
+to see logs from passing tests too.
 
 ## How the tests work
 
-Solution files have no `module.exports`, so they stay pasteable into LeetCode
-verbatim. `leetcode/_harness.js` reads the source and evaluates it to get the
-function, then handles a few LeetCode-specific details:
+A test file imports its solution directly and hands the function to the shared
+harness in `leetcode/_harness.js`:
+
+```javascript
+import { runCases } from './_harness.js';
+import { twoSum } from './twoSum.2026.08.11.js';
+
+runCases({ fn: twoSum, fnName: 'twoSum', paramTypes: ['integer[]', 'integer'],
+           compare: 'unordered', cases: [ /* ... */ ] });
+```
+
+Solution files therefore end with `module.exports = { twoSum };`. The harness
+handles the LeetCode-specific parts that no test runner knows about:
 
 - **In-place problems** — when LeetCode's metadata says the answer is a mutated
   argument rather than the return value, the test asserts on that argument.
@@ -89,17 +109,31 @@ function, then handles a few LeetCode-specific details:
   real nodes before the call.
 - **Result ordering** — each test declares `compare: 'exact' | 'unordered' |
   'unorderedDeep'`. LeetCode's metadata has no order flag, so the generator
-  guesses from the problem statement and writes down its reasoning. When an
-  exact comparison fails, the harness reports whether a looser one would have
-  passed:
+  guesses from the problem statement and records its reasoning in a comment.
+  When an exact comparison fails but a looser one would pass, the failure says
+  so:
 
   ```
-  hint: same elements, different order — this passes with compare: 'unordered'
+  same elements, different order — this passes with compare: 'unordered'
   ```
 
   Change the one word and rerun.
 
 Some problems can't be checked automatically — a returned tree, or an expected
-output the statement qualifies in prose (`2, nums = [1,2,_]`). Those get a `TODO`
-in place of cases, explaining what blocked it, rather than an assertion that
-looks right and isn't.
+output the statement qualifies in prose (`2, nums = [1,2,_]`). Those get a
+`TODO` in place of cases explaining what blocked it, rather than an assertion
+that looks right and isn't.
+
+### Strict mode
+
+Vitest compiles modules as strict, so implicit globals now throw instead of
+silently leaking:
+
+```javascript
+for (i = 0; i < n; i++)      // ReferenceError: i is not defined
+for (let i = 0; i < n; i++)  // fine
+```
+
+Generated stubs declare `'use strict'` so a direct `node file.js` run behaves
+the same way. Older solutions in this repo predate that and may need a `let`
+added before they can be imported by a test.

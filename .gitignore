@@ -5,3 +5,6 @@ Exercism/
 # uv creates this for tools/fetch_problem.py; uv.lock is committed instead
 .venv/
 __pycache__/
+
+# vitest deps; package-lock.json is committed instead
+node_modules/
