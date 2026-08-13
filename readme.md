@@ -6,6 +6,7 @@ Welcome to my study notes & practice area
 
 | Problem | Difficulty | Completed | Solution | Notes |
 |---|---|---|---|---|
+| [Add Two Numbers](https://leetcode.com/problems/add-two-numbers/) | Medium | 2026.08.12 23:36 | [addTwoNumbers.2026.08.12.js](leetcode/addTwoNumbers.2026.08.12.js) | |
 | [Valid Anagram](https://leetcode.com/problems/valid-anagram/) | Easy | 2026.08.12 15:40 | [validAnagram.2026.08.09.js](leetcode/validAnagram.2026.08.09.js) | |
 | [Plus One](https://leetcode.com/problems/plus-one/) | Easy | 2026.08.12 14:46 | [plusOne.2026.08.12.js](leetcode/plusOne.2026.08.12.js) | |
 | [Spiral Matrix](https://leetcode.com/problems/spiral-matrix/) | Medium | 2026.08.12 10:42 | [spiralMatrix.2026.08.12.js](leetcode/spiralMatrix.2026.08.12.js) | |
@@ -28,7 +29,7 @@ Welcome to my study notes & practice area
 
 | Month | Solved | Easy | Medium | Hard |
 |---|---|---|---|---|
-| 2026.08 | 6 | 3 | 3 | 0 |
+| 2026.08 | 7 | 3 | 4 | 0 |
 | 2026.07 | 1 | 1 | 0 | 0 |
 | 2025.02 | 10 | 6 | 4 | 0 |
 
